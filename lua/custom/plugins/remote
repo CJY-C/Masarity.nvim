@@ -1,0 +1,14 @@
+return {
+  "niuiic/remote.nvim",
+  event = "VeryLazy",
+  dependencies = {"niuiic/core.nvim"},
+  config = function ()
+    -- 配置快捷键
+    vim.api.nvim_set_keymap('n', '<leader>rco', '<cmd>lua require("remote").connect()<CR>', { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<leader>rce', '<cmd>lua require("remote").edit_config()<CR>', { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<leader>rcl', '<cmd>lua require("remote").check_log()<CR>', { noremap = true, silent = true })
+
+    -- 退出nvim时关闭所有连接
+    vim.cmd [[autocmd VimLeave * lua require('remote').disconnect()]]
+  end
+}
