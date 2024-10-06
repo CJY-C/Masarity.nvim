@@ -273,28 +273,37 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
-    'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
-
-      -- Document existing key chains
-      require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-        ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-        ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
-      }
-      -- visual mode
-      require('which-key').register({
-        ['<leader>h'] = { 'Git [H]unk' },
-      }, { mode = 'v' })
-    end,
-  },
+  -- { -- Useful plugin to show you pending keybinds.
+  --   'folke/which-key.nvim',
+  --   commit = 'b8fb714',
+  --   event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+  --   config = function() -- This is the function that runs, AFTER loading
+  --     require('which-key').setup()
+  --
+  --     -- Document existing key chains
+  --     require('which-key').add {
+  --       { '<leader>c', group = '[C]ode' },
+  --       { '<leader>ca', vim.lsp.buf.code_action, desc = '[C]ode [A]ction', mode = 'n' },
+  --       { '<leader>d', group = '[D]ocument]' },
+  --       { '<leader>r', group = '[R]ename]' },
+  --       { '<leader>s', group = '[S]earch]' },
+  --       { '<leader>w', group = '[W]orkspace]' },
+  --       { '<leader>t', group = '[T]oggle]' },
+  --       { '<leader>h', group = 'Git [H]unk]' },
+  --       -- ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
+  --       -- ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
+  --       -- ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
+  --       -- ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
+  --       -- ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+  --       -- ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
+  --       -- ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+  --     }
+  --     -- visual mode
+  --     -- require('which-key').add({
+  --     --   ['<leader>h'] = { 'Git [H]unk' },
+  --     -- }, { mode = 'v' })
+  --   end,
+  -- },
 
   -- NOTE: Plugins can specify dependencies.
   --
@@ -497,7 +506,7 @@ require('lazy').setup({
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+          -- map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap.
@@ -618,6 +627,9 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
+            if server_name == 'tsserver' then
+              server_name = 'ts_ls'
+            end
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
@@ -796,7 +808,23 @@ require('lazy').setup({
       }
     end,
   },
+  { -- You can easily change to a different colorscheme.
+    -- Change the name of the colorscheme plugin below, and then
+    -- change the command in the config to whatever the name of that colorscheme is.
+    --
+    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    'folke/tokyonight.nvim',
+    priority = 1000, -- Make sure to load this before all the other start plugins.
+    init = function()
+      -- Load the colorscheme here.
+      -- Like many other themes, this one has different styles, and you could load
+      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      vim.cmd.colorscheme 'tokyonight-night'
 
+      -- You can configure highlights by doing something like:
+      vim.cmd.hi 'Comment gui=none'
+    end,
+  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -818,13 +846,13 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup {
         mappings = {
-          add = 'Sa', -- Add surrounding in Normal and Visual modes
-          delete = 'Sd', -- Delete surrounding
-          find = 'Sf', -- Find surrounding (to the right)
-          find_left = 'SF', -- Find surrounding (to the left)
-          highlight = 'Sh', -- Highlight surrounding
-          replace = 'Sr', -- Replace surrounding
-          update_n_lines = 'Sn', -- Update `n_lines`
+          add = 'sa', -- Add surrounding in Normal and Visual modes
+          delete = 'sd', -- Delete surrounding
+          find = 'sf', -- Find surrounding (to the right)
+          find_left = 'sF', -- Find surrounding (to the left)
+          highlight = 'sh', -- Highlight surrounding
+          replace = 'sr', -- Replace surrounding
+          update_n_lines = 'sn', -- Update `n_lines`
 
           suffix_last = 'l', -- Suffix to search with "prev" method
           suffix_next = 'n', -- Suffix to search with "next" method
@@ -865,6 +893,15 @@ require('lazy').setup({
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = 'gnn',
+          node_incremental = 'grn',
+          scope_incremental = 'grc',
+          node_decremental = 'grm',
+        },
+      },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -929,6 +966,7 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+vim.g.python3_host_prog = '/home/masa/micromamba/envs/dev/bin/python3'
 
 vim.cmd [[
   nnoremap <C-c> :noh<return><C-c>

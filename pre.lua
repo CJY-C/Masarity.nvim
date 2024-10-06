@@ -143,7 +143,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  -- { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -402,23 +402,23 @@ require('telescope').setup {
   },
   extensions = {
     fzf = {
-      fuzzy = true,                    -- false will only do exact matching
-      override_generic_sorter = true,  -- override the generic sorter
-      override_file_sorter = true,     -- override the file sorter
-      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-                                       -- the default case_mode is "smart_case"
-    }
+      fuzzy = true, -- false will only do exact matching
+      override_generic_sorter = true, -- override the generic sorter
+      override_file_sorter = true, -- override the file sorter
+      case_mode = 'smart_case', -- or "ignore_case" or "respect_case"
+      -- the default case_mode is "smart_case"
+    },
   },
-  config = function ()
-    vim.cmd([[
+  config = function()
+    vim.cmd [[
       set grepprg=rg\ --vimgrep\ --no-heading
-    ]])
-  end
+    ]]
+  end,
 }
 
 -- Enable telescope fzf native, if installed
 -- pcall(require('telescope').load_extension, 'fzf')
-require('telescope').load_extension('fzf')
+require('telescope').load_extension 'fzf'
 
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
@@ -603,26 +603,26 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
-  vim.cmd([[autocmd Filetype json setlocal ts=2 sw=2 expandtab]])
+  vim.cmd [[autocmd Filetype json setlocal ts=2 sw=2 expandtab]]
 end
 
 -- document existing key chains
-require('which-key').register {
-  ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-  ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-  ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-  ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
-  ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-  ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-  ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-  ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-}
+-- require('which-key').add {
+--   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
+--   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
+--   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
+--   ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+--   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
+--   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
+--   ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
+--   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+-- }
 -- register which-key VISUAL mode
 -- required for visual <leader>hs (hunk stage) to work
-require('which-key').register({
-  ['<leader>'] = { name = 'VISUAL <leader>' },
-  ['<leader>h'] = { 'Git [H]unk' },
-}, { mode = 'v' })
+-- require('which-key').add({
+--   ['<leader>'] = { name = 'VISUAL <leader>' },
+--   ['<leader>h'] = { 'Git [H]unk' },
+-- }, { mode = 'v' })
 
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
@@ -735,16 +735,16 @@ cmp.setup {
   },
 }
 
-local cmp_nvim_lsp = require "cmp_nvim_lsp"
-    require("lspconfig").clangd.setup {
-      capabilities = cmp_nvim_lsp.default_capabilities(),
-      cmd = {
-        "clangd",
-        "--offset-encoding=utf-16",
-      },
-    }
+local cmp_nvim_lsp = require 'cmp_nvim_lsp'
+require('lspconfig').clangd.setup {
+  capabilities = cmp_nvim_lsp.default_capabilities(),
+  cmd = {
+    'clangd',
+    '--offset-encoding=utf-16',
+  },
+}
 vim.g.python3_host_prog = '/home/masa/micromamba/envs/dev/bin/python3'
-vim.cmd([[
+vim.cmd [[
   nnoremap <C-c> :noh<return><C-c>
   nnoremap <esc> :noh<return><esc>
   set grepprg=rg\ --vimgrep\ --smart-case\ --follow
@@ -753,7 +753,6 @@ vim.cmd([[
   set encoding=utf8
   set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb18030,sjis
 ]]
-)
 
 -- local dap = require('dap')
 -- dap.configurations.python = {
