@@ -96,6 +96,8 @@ return {
           local cwd = vim.fn.getcwd()
           if vim.fn.executable(cwd .. '/venv/bin/python') == 1 then
             return cwd .. '/venv/bin/python'
+          elseif os.getenv 'VIRTUAL_ENV' ~= nil then
+            return os.getenv 'VIRTUAL_ENV' .. '/bin/python'
           elseif vim.fn.executable(cwd .. '/.venv/bin/python') == 1 then
             return cwd .. '/.venv/bin/python'
           elseif os.getenv 'CONDA_PREFIX' ~= nil then
